@@ -81,6 +81,7 @@ def _grouped_bars(df: pd.DataFrame, value: str, testset: str, models: list[str],
         ax.bar(xs, sub[value], width=width - 0.02, color=color, label=label, edgecolor=SURFACE, linewidth=1,
                yerr=yerr, error_kw={"ecolor": INK2, "elinewidth": 0.8, "capsize": 2})
     ax.set_xticks(range(len(conds)), [COND_LABEL.get(c, c) for c in conds])
+    ax.set_ylim(0, ax.get_ylim()[1] * 1.15)  # 범례가 막대와 겹치지 않게 위쪽 여백
     ax.set_ylabel(ylabel)
     ax.yaxis.grid(True, color=GRID, linewidth=0.8)
     ax.set_axisbelow(True)
