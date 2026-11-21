@@ -30,3 +30,26 @@ def test_extract_marks_failures_nan(hand_image):
     assert out["det"].tolist() == [False, True]
     assert np.isnan(out["lm"][0]).all() and np.isfinite(out["lm"][1]).all()
     assert out["right"].dtype == bool and not out["right"][0]
+
+
+def test_save_and_load_landmarks_roundtrip(tmp_path, monkeypatch):
+    from signlight import landmarks as L
+
+    monkeypatch.setattr(L, "LANDMARKS_PATH", tmp_path / "lm.npz")
+    out = {"lm": np.zeros((2, 21, 3), np.float32), "det": np.array([True, False]), "right": np.array([True, False])}
+    L.save_landmarks(out)
+    back = L.load_landmarks()
+    assert set(back) == {"lm", "det", "right"}
+    np.testing.assert_array_equal(back["det"], out["det"])
+
+
+def test_detection_rate_table():
+    import pandas as pd
+
+    from signlight.landmarks import detection_rate_table
+
+    idx = pd.DataFrame({"label": ["A", "A", "B", "B"], "split": ["train", "test", "train", "train"]})
+    t = detection_rate_table(idx, np.array([True, False, True, True]))
+    assert t.loc[("A", "train"), "det_rate"] == 1.0
+    assert t.loc[("A", "test"), "det_rate"] == 0.0
+    assert t.loc[("B", "train"), "n"] == 2

@@ -75,3 +75,40 @@ def extract(
             if progress and (i + 1) % progress == 0:
                 print(f"{i + 1}/{n} {time.time() - t:.0f}s det={det[: i + 1].mean():.3f}", flush=True)
     return {"lm": lm, "det": det, "right": right}
+
+
+def save_landmarks(out: dict[str, np.ndarray]) -> None:
+    LANDMARKS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(LANDMARKS_PATH, **out)
+
+
+def load_landmarks() -> dict[str, np.ndarray]:
+    """index.csv와 같은 행 순서의 lm/det/right."""
+    with np.load(LANDMARKS_PATH) as z:
+        return {k: z[k] for k in ("lm", "det", "right")}
+
+
+def detection_rate_table(index, det: np.ndarray):
+    import pandas as pd
+
+    df = pd.DataFrame({"label": index["label"].values, "split": index["split"].values, "det": det})
+    return df.groupby(["label", "split"])["det"].agg(n="size", det_rate="mean")
+
+
+def main() -> None:
+    from .data import load_index
+    from .images import load_rgb
+
+    idx = load_index()
+    images = (load_rgb(C.ASL_ROOT / p) for p in idx["relpath"])
+    out = extract(images, len(idx), progress=2000)
+    save_landmarks(out)
+    table = detection_rate_table(idx, out["det"])
+    table.to_csv(C.RESULTS_DIR / "detection_rate.csv")
+    det = out["det"]
+    print(f"detect rate {det.mean():.4f}, right among detected {out['right'][det].mean():.4f}")
+    print(table.groupby(level="split")["det_rate"].mean().round(4).to_dict())
+
+
+if __name__ == "__main__":
+    main()
