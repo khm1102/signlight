@@ -41,10 +41,11 @@ mkdir -p results/logs
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 rbash() {  # 원격 bash 실행 (출력이 없어도 끊기지 않게 timeout 0)
   # colab exec는 셀이 실패해도 종료 코드 0을 돌려주므로 출력에서 실패를 찾아 멈춘다.
-  local out; out=$(mktemp)
-  printf '%%%%bash\nset -euo pipefail\nexport SIGNLIGHT_ROOT=%s PYTHONUNBUFFERED=1\n%s\n' "$R" "$1" \
+  # 성공 표시(마커)가 출력에 있어야만 통과시킨다(fail-closed): 커널 종료·연결 끊김도 실패로 본다.
+  local out marker; out=$(mktemp); marker="__RBASH_OK_${RANDOM}${RANDOM}__"
+  printf '%%%%bash\nset -euo pipefail\nexport SIGNLIGHT_ROOT=%s PYTHONUNBUFFERED=1\n%s\necho %s\n' "$R" "$1" "$marker" \
     | colab exec -s "$SESSION" --timeout 0 2>&1 | tee "$out"
-  if grep -q "CalledProcessError" "$out"; then
+  if grep -q "CalledProcessError" "$out" || ! grep -Eq "^${marker}[[:space:]]*$" "$out"; then
     rm -f "$out"; log "원격 명령 실패 — 중단"; exit 1
   fi
   rm -f "$out"
@@ -54,14 +55,14 @@ log "wheel 빌드"
 rm -rf dist && uv build --wheel -q -o dist
 WHEEL=$(ls dist/signlight-*.whl | head -1)
 
-log "세션 생성: $SESSION ($GPU)"
-colab new -s "$SESSION" --gpu "$GPU"
 cleanup() {
   log "세션 로그 저장 후 종료"
   colab log -s "$SESSION" -o "results/logs/colab_${STAMP}.md" || true
   colab stop -s "$SESSION" || true
 }
-trap cleanup EXIT
+trap cleanup EXIT  # colab new 전에 걸어서, 생성 도중 실패·중단돼도 세션을 끈다
+log "세션 생성: $SESSION ($GPU)"
+colab new -s "$SESSION" --gpu "$GPU"
 
 rbash "mkdir -p $R/dist $R/data/raw/_download $R/data/processed $R/models $R/results/preds $R/results/logs; nvidia-smi --query-gpu=name,memory.total --format=csv; python --version"
 

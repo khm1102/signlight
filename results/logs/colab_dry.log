@@ -1,15 +1,19 @@
-[01:13:56] wheel 빌드
-[01:13:56] 세션 생성: cnndry (T4)
+[02:54:54] wheel 빌드
+[02:54:54] 세션 생성: cnndry (T4)
 [colab] Creating session 'cnndry'...
 [colab] Session READY.
 name, memory.total [MiB]
 Tesla T4, 15360 MiB
 Python 3.13.16
-[01:14:04] 업로드: wheel, index.csv
+__RBASH_OK_99784328__
+[02:55:01] 업로드: wheel, index.csv
 [colab] Uploaded 'dist/signlight-0.1.0-py3-none-any.whl' to '/content/signlight/dist/signlight-0.1.0-py3-none-any.whl'
 [colab] Uploaded 'data/processed/index.csv' to '/content/signlight/data/processed/index.csv'
-[01:14:07] 원격 준비: 데이터(kagglehub), 패키지 설치
+[02:55:04] 원격 준비: 데이터(kagglehub), 패키지 설치
+Using Colab cache for faster access to the 'asl-alphabet' dataset.
+copied 72000 files in 31 s
 tf 2.21.0 [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')] index 72000 missing 0
+__RBASH_OK_65054596__
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
 signlight 0.1.0 requires mediapipe>=1.2.3, which is not installed.
 signlight 0.1.0 requires matplotlib>=3.11.2, but you have matplotlib 3.10.0 which is incompatible.
@@ -20,25 +24,26 @@ signlight 0.1.0 requires pillow>=13.0.0, but you have pillow 11.3.0 which is inc
 signlight 0.1.0 requires scikit-learn>=1.9.1, but you have scikit-learn 1.6.1 which is incompatible.
 signlight 0.1.0 requires tqdm>=4.70.1, but you have tqdm 4.67.3 which is incompatible.
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1795277655.608652    1535 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+I0000 00:00:1795283743.713516     705 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-[01:18:07] 학습: plain seed 42 (1 epochs)
-8/8 - 31s - 4s/step - accuracy: 0.1979 - loss: 2.8249 - val_accuracy: 0.0417 - val_loss: 3.1790
+[02:55:53] 학습: plain seed 42 (1 epochs)
+8/8 - 30s - 4s/step - accuracy: 0.1979 - loss: 2.8250 - val_accuracy: 0.0417 - val_loss: 3.1790
+__RBASH_OK_3103212976__
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1795277889.641022    2494 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+I0000 00:00:1795283755.737455     768 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-W0000 00:00:1795277894.763803    2494 gpu_bfc_allocator.cc:47] Overriding orig_value setting because the TF_FORCE_GPU_ALLOW_GROWTH environment variable is set. Original config value was false.
-I0000 00:00:1795277894.765574    2494 gpu_device.cc:2043] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13757 MB memory:  -> device: 0, name: Tesla T4, pci bus id: 0000:00:04.0, compute capability: 7.5
-I0000 00:00:1795277901.644015    2531 service.cc:153] XLA service 0x7d4f10037e50 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-I0000 00:00:1795277901.644070    2531 service.cc:161]   StreamExecutor [0]: Tesla T4, Compute Capability 7.5 (Driver: 13.0.0; Runtime: 12.9.0; Toolkit: 12.5.0; DNN: 9.28.0)
-I0000 00:00:1795277901.730294    2531 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
-I0000 00:00:1795277902.089338    2531 cuda_dnn.cc:461] Loaded cuDNN version 92800
-I0000 00:00:1795277902.181511    2531 dot_merger.cc:481] Merging Dots in computation: a_inference_one_step_on_data_3221__.70
-E0000 00:00:1795277907.706629    2531 cuda_timer.cc:87] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
-I0000 00:00:1795277914.716426    2531 device_compiler.h:208] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
-I0000 00:00:1795277915.529974    2530 dot_merger.cc:481] Merging Dots in computation: a_inference_one_step_on_data_3221__.70
-E0000 00:00:1795277919.914512    2530 cuda_timer.cc:87] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
-[01:19:02] 예측: plain seed 42 (synth)
+W0000 00:00:1795283760.844202     768 gpu_bfc_allocator.cc:47] Overriding orig_value setting because the TF_FORCE_GPU_ALLOW_GROWTH environment variable is set. Original config value was false.
+I0000 00:00:1795283760.846117     768 gpu_device.cc:2043] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13757 MB memory:  -> device: 0, name: Tesla T4, pci bus id: 0000:00:04.0, compute capability: 7.5
+I0000 00:00:1795283766.679318     808 service.cc:153] XLA service 0x7fb9c4099a50 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1795283766.679348     808 service.cc:161]   StreamExecutor [0]: Tesla T4, Compute Capability 7.5 (Driver: 13.0.0; Runtime: 12.9.0; Toolkit: 12.5.0; DNN: 9.28.0)
+I0000 00:00:1795283766.765624     808 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+I0000 00:00:1795283767.128810     808 cuda_dnn.cc:461] Loaded cuDNN version 92800
+I0000 00:00:1795283767.240976     808 dot_merger.cc:481] Merging Dots in computation: a_inference_one_step_on_data_3221__.70
+E0000 00:00:1795283773.028949     808 cuda_timer.cc:87] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
+I0000 00:00:1795283780.523690     808 device_compiler.h:208] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+I0000 00:00:1795283781.531163     808 dot_merger.cc:481] Merging Dots in computation: a_inference_one_step_on_data_3221__.70
+E0000 00:00:1795283787.027293     808 cuda_timer.cc:87] Delay kernel timed out: measured time has sub-optimal accuracy. There may be a missing warmup execution, please investigate in Nsight Systems.
+[02:56:36] 예측: plain seed 42 (synth)
 cnn_plain 42 synth clean 0.0417
 cnn_plain 42 synth dark_0.5 0.0417
 cnn_plain 42 synth dark_0.25 0.0417
@@ -46,32 +51,33 @@ cnn_plain 42 synth clutter 0.05
 cnn_plain 42 synth shift 0.0583
 cnn_plain 42 synth scale_small 0.0417
 cnn_plain 42 synth scale_large 0.05
+__RBASH_OK_142686958__
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1795277944.894549    3413 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+I0000 00:00:1795283798.611377    1632 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-W0000 00:00:1795277949.294776    3413 gpu_bfc_allocator.cc:47] Overriding orig_value setting because the TF_FORCE_GPU_ALLOW_GROWTH environment variable is set. Original config value was false.
-I0000 00:00:1795277949.296484    3413 gpu_device.cc:2043] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13757 MB memory:  -> device: 0, name: Tesla T4, pci bus id: 0000:00:04.0, compute capability: 7.5
-I0000 00:00:1795277951.726786    3451 service.cc:153] XLA service 0x7da4580413a0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-I0000 00:00:1795277951.726827    3451 service.cc:161]   StreamExecutor [0]: Tesla T4, Compute Capability 7.5 (Driver: 13.0.0; Runtime: 12.9.0; Toolkit: 12.5.0; DNN: 9.28.0)
-I0000 00:00:1795277951.736920    3451 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
-I0000 00:00:1795277951.802518    3451 cuda_dnn.cc:461] Loaded cuDNN version 92800
-I0000 00:00:1795277955.941800    3451 device_compiler.h:208] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
-[01:19:26] 결과 다운로드
-[colab] Downloaded '/content/signlight/out.tgz' to '/var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.cupRTyzfaA/out.tgz'
+W0000 00:00:1795283803.236037    1632 gpu_bfc_allocator.cc:47] Overriding orig_value setting because the TF_FORCE_GPU_ALLOW_GROWTH environment variable is set. Original config value was false.
+I0000 00:00:1795283803.237866    1632 gpu_device.cc:2043] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13757 MB memory:  -> device: 0, name: Tesla T4, pci bus id: 0000:00:04.0, compute capability: 7.5
+I0000 00:00:1795283804.970646    1676 service.cc:153] XLA service 0x7c2f5002fa80 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1795283804.970688    1676 service.cc:161]   StreamExecutor [0]: Tesla T4, Compute Capability 7.5 (Driver: 13.0.0; Runtime: 12.9.0; Toolkit: 12.5.0; DNN: 9.28.0)
+I0000 00:00:1795283804.979786    1676 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+I0000 00:00:1795283805.052695    1676 cuda_dnn.cc:461] Loaded cuDNN version 92800
+I0000 00:00:1795283809.346743    1676 device_compiler.h:208] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+[02:56:56] 결과 받기: plain seed 42
+__RBASH_OK_714919159__
+[colab] Downloaded '/content/signlight/out.tgz' to '/var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.d5gFt4Zirk/out.tgz'
 results/preds/
-results/preds/cnn_plain__synth__clutter__s42.npz
-results/preds/cnn_plain__synth__dark_0.25__s42.npz
-results/preds/cnn_plain__synth__dark_0.5__s42.npz
-results/preds/cnn_plain__synth__clean__s42.npz
 results/preds/cnn_plain__synth__scale_large__s42.npz
-results/preds/cnn_plain__synth__shift__s42.npz
+results/preds/cnn_plain__synth__clean__s42.npz
+results/preds/cnn_plain__synth__clutter__s42.npz
 results/preds/cnn_plain__synth__scale_small__s42.npz
+results/preds/cnn_plain__synth__dark_0.25__s42.npz
+results/preds/cnn_plain__synth__shift__s42.npz
+results/preds/cnn_plain__synth__dark_0.5__s42.npz
 results/logs/
 results/logs/cnn_plain_s42_history.json
 models/cnn_plain_s42.keras
-[01:19:30] dry 실행: 결과를 저장소에 풀지 않음
-[01:19:30] 세션 로그 저장 후 종료
-[colab] Exported history to 'results/logs/colab_20261122_011356.md'.
+[02:56:59] 완료
+[02:56:59] 세션 로그 저장 후 종료
+[colab] Exported history to 'results/logs/colab_20261122_025454.md'.
 [colab] Stopping session 'cnndry'...
 [colab] Session terminated.
-exit=0
