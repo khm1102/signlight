@@ -1,0 +1,35 @@
+[project]
+name = "signlight"
+version = "0.1.0"
+description = "수어 알파벳 인식: CNN vs Random Forest (MediaPipe) 촬영 환경별 성능 비교"
+readme = "README.md"
+authors = [
+    { name = "김현민", email = "rlagusals1102@gmail.com" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "mediapipe>=1.2.3",
+    "numpy>=2.5.5",
+    "opencv-python>=5.1.0.95",
+    "pandas>=3.1.1",
+    "pillow>=13.0.0",
+    "scikit-learn>=1.9.1",
+    "seaborn>=0.13.2",
+    "tensorflow>=2.21.0",
+    "tqdm>=4.70.1",
+]
+
+[project.scripts]
+signlight = "signlight:main"
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "jupyterlab>=4.6.6",
+    "ruff>=0.17.6",
+]
