@@ -17,11 +17,11 @@
 
 ## 다음
 1. 🙋 팀원 촬영(`docs/PHOTO_PROTOCOL.md`, 목표 768장) → Task 15 실행 명령은 `docs/REPORT.md` 6절에 있다.
-2. 🙋 발표 자료(Task 18): 슬라이드별 구성안과 대본 요지는 `docs/PRESENTATION_OUTLINE.md`에 있다. PPT 파일을 만들려면 렌더링 검수 도구(LibreOffice)가 필요한데, 설치 권한이 거절됐다. 사용자가 형식(기획안 디자인 계승 여부, 발표 시간)과 도구를 정해야 한다.
+2. 발표 자료(Task 18) 초안: 비공개 Slides 아티팩트 https://claude.ai/artifact/1V4KsdXRLbNd7XazKrVWGL (7장, 발표자 노트 포함, .pptx/PDF로 내려받기 가능). 구성안은 `docs/PRESENTATION_OUTLINE.md`. 6번 슬라이드(직접 촬영 결과)는 비어 있고, 발표일은 [발표일]로 남겨 둠. 기획안 PPT 디자인으로 다시 만들려면 LibreOffice 설치가 필요(권한 거절됨).
 
 ## 막힌 점/대기
 - 직접 촬영 사진 0장(사람 작업)
-- 발표 자료 형식 확인 필요(사람 결정)
+- 발표 자료: 초안 완성. 6번 슬라이드는 촬영 결과 대기, 형식(기획안 디자인 계승 여부, 발표 시간)은 사용자 확인 필요
 
 ## 운영 메모
 - Colab: `colab exec`는 원격 셀이 실패해도 종료 코드 0을 돌려준다. 그래서 스크립트가 출력에서 `CalledProcessError`를 찾아 멈춘다. 1GB 업로드는 실패하므로 데이터는 `kagglehub`로 받는다(`/kaggle/input`은 NFS라 로컬 디스크로 복사).
