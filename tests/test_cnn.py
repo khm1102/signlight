@@ -67,3 +67,18 @@ def test_subsample_keeps_columns_and_limits_per_class_split():
     s = subsample(idx, 2)
     assert list(s.columns) == list(idx.columns)
     assert s.groupby(["y", "split"]).size().tolist() == [2, 2, 2, 2]
+
+
+def test_predict_custom_saves_preds(tmp_path, monkeypatch):
+    from signlight import config as C
+    from signlight.cnn import predict_custom
+    from signlight.evaluate import load_preds
+
+    monkeypatch.setattr(C, "PREDS_DIR", tmp_path / "preds")
+    for cond, letter in (("normal", "A"), ("position", "C")):
+        d = tmp_path / "photos" / cond / letter
+        d.mkdir(parents=True)
+        Image.fromarray(np.zeros((60, 80, 3), np.uint8)).save(d / "khm_1.jpg")
+    predict_custom(build_model(24, 64), "cnn_plain", 42, root=tmp_path / "photos", size=64)
+    yt, yp = load_preds(C.PREDS_DIR / "cnn_plain__custom__position__s42.npz")
+    assert yt.tolist() == [2] and yp.shape == (1,) and 0 <= yp[0] < 24

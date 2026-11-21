@@ -118,6 +118,20 @@ def train(variant: str, seed: int, epochs: int, per_class: int | None = None) ->
         json.dumps({k: [float(v) for v in vs] for k, vs in hist.history.items()}, indent=1))
 
 
+def predict_custom(model: keras.Model, name: str, seed: int, root: Path | None = None, size: int = C.CNN_SIZE) -> None:
+    """직접 촬영셋 조건별 예측 저장. 사진은 잘라 내지 않고 정사각형으로 패딩한 뒤 리사이즈한다."""
+    from .custom_test import scan
+
+    df = scan(root)
+    for cond in C.CONDITIONS:
+        rows = df[df["condition"] == cond]
+        if rows.empty:
+            continue
+        pred = predict_images(model, (load_rgb(p) for p in rows["path"]), size=size)
+        save_preds(name, "custom", cond, rows["y"], pred, seed=seed)
+        print(name, seed, "custom", cond, len(rows), round(e2e_accuracy(rows["y"], pred), 4), flush=True)
+
+
 def predict(variant: str, seed: int, testsets: list[str], per_class: int = 100) -> None:
     model = keras.models.load_model(model_path(variant, seed))
     idx = load_index()
@@ -135,6 +149,8 @@ def predict(variant: str, seed: int, testsets: list[str], per_class: int = 100) 
                 pred = predict_images(model, imgs)
                 save_preds(name, "synth", cond, sub["y"], pred, seed=seed)
                 print(name, seed, "synth", cond, round(e2e_accuracy(sub["y"], pred), 4), flush=True)
+        elif testset == "custom":
+            predict_custom(model, name, seed)
         else:
             raise ValueError(f"unknown testset: {testset}")
 

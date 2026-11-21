@@ -111,6 +111,32 @@ def main(per_class: int = 100) -> None:
     (C.RESULTS_DIR / "rf_train_log.json").write_text(json.dumps(log, indent=1, default=str))
 
 
+# 저장된 모델 이름 → (특징 종류, 좌우 정렬)
+MODEL_FEATS = {"rf_geom": ("geom", True), "dt_geom": ("geom", True), "rf_norm": ("norm", True),
+               "rf_geom_nocanon": ("geom", False)}
+
+
+def eval_custom(models: list[str] = ("rf_geom", "dt_geom"), root=None) -> None:
+    """직접 촬영셋(data/custom_test) 평가. 조건별로 예측을 저장한다(testset = custom)."""
+    from .custom_test import scan
+
+    df = scan(root)
+    if df.empty:
+        print("직접 촬영 사진 없음: data/custom_test/ 를 채운 뒤 다시 실행")
+        return
+    lm = extract((load_rgb(p) for p in df["path"]), len(df), progress=100)
+    print(f"custom: {len(df)}장, 검출률 {lm['det'].mean():.3f}", flush=True)
+    for name in models:
+        model = joblib.load(C.MODELS_DIR / f"{name}.joblib")
+        kind, canon = MODEL_FEATS[name]
+        pred = predict_e2e(model, _feats(lm, kind, canon))
+        for cond in C.CONDITIONS:
+            mask = (df["condition"] == cond).to_numpy()
+            if mask.any():
+                save_preds(name, "custom", cond, df["y"].to_numpy()[mask], pred[mask])
+                print(name, cond, f"n={mask.sum()}", f"acc={e2e_accuracy(df['y'].to_numpy()[mask], pred[mask]):.4f}")
+
+
 def eval_clahe(per_class: int = 100) -> None:
     """EXP-005: 학습된 rf_geom에 CLAHE 전처리 후 추출한 합성셋 관절을 넣어 평가(rf_geom_clahe)."""
     idx = load_index()
@@ -128,5 +154,11 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-class", type=int, default=100)
     ap.add_argument("--clahe", action="store_true", help="EXP-005: CLAHE 전처리 평가만 실행")
+    ap.add_argument("--testsets", default=None, help="custom: 저장된 모델로 직접 촬영셋만 평가")
     a = ap.parse_args()
-    eval_clahe(a.per_class) if a.clahe else main(a.per_class)
+    if a.clahe:
+        eval_clahe(a.per_class)
+    elif a.testsets == "custom":
+        eval_custom()
+    else:
+        main(a.per_class)
