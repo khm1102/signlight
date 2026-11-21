@@ -60,3 +60,16 @@ def test_report_counts_condition_by_letter(tmp_path):
     assert r.loc["A", "normal"] == 2 and r.loc["A", "dark"] == 0
     assert list(r.columns) == ["normal", "dark", "complex_bg", "position"]
     assert len(r) == 24
+
+
+def test_scan_rejects_misplaced_or_unknown_files(tmp_path):
+    _touch(tmp_path, "normal/A/khm_1.jpg")
+    _touch(tmp_path, "normal/khm_2.jpg")          # 글자 폴더 없이 조건 폴더에 바로
+    _touch(tmp_path, "normal/B/sub/khm_3.jpg")    # 글자 폴더 안의 하위 폴더
+    _touch(tmp_path, "dark/C/khm_4.webp")         # 지원하지 않는 형식
+    _touch(tmp_path, "khm_6.jpg")                 # 루트에 바로
+    with pytest.raises(ValueError) as e:
+        scan(tmp_path)
+    msg = str(e.value)
+    for part in ("normal/khm_2.jpg", "normal/B/sub", "dark/C/khm_4.webp", "khm_6.jpg"):
+        assert part in msg

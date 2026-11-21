@@ -51,3 +51,39 @@ def test_eval_custom_saves_preds_per_condition(tmp_path, monkeypatch, need_model
     yt, yp = load_preds(C.PREDS_DIR / "rf_geom__custom__normal.npz")
     assert yt.tolist() == [0] and yp.tolist() == [FAIL]  # 손이 없는 사진 → 검출 실패
     assert (C.PREDS_DIR / "rf_geom__custom__dark.npz").exists()
+
+
+def test_synth_cache_invalidated_when_fingerprint_changes(tmp_path, monkeypatch):
+    import pandas as pd
+
+    from signlight import rf
+
+    calls = []
+
+    def fake_extract(images, n, **kw):
+        list(images)
+        calls.append(kw.get("preprocess"))
+        return {"lm": np.zeros((n, 21, 3), np.float32), "det": np.ones(n, bool), "right": np.ones(n, bool)}
+
+    monkeypatch.setattr(rf, "extract", fake_extract)
+    monkeypatch.setattr(rf, "load_rgb", lambda p: np.zeros((8, 8, 3), np.uint8))
+    sub = pd.DataFrame({"relpath": ["train/A/A1.jpg", "train/B/B1.jpg"], "y": [0, 1]}, index=[5, 9])
+    cache = tmp_path / "c.npz"
+    rf.synth_landmarks(["clean"], sub, cache=cache)
+    rf.synth_landmarks(["clean"], sub, cache=cache)
+    assert len(calls) == 1  # 같은 설정이면 캐시 재사용
+    rf.synth_landmarks(["clean"], sub, cache=cache, preprocess="clahe")
+    assert len(calls) == 2  # 전처리가 다르면 다시 추출
+    monkeypatch.setattr(rf.C, "DET_CONF", 0.9)
+    rf.synth_landmarks(["clean"], sub, cache=cache, preprocess="clahe")
+    assert len(calls) == 3  # 검출 설정이 바뀌어도 다시 추출
+
+
+def test_cli_rejects_unknown_testsets():
+    import pytest
+
+    from signlight.rf import parse_args
+
+    with pytest.raises(SystemExit):
+        parse_args(["--testsets", "synth"])
+    assert parse_args(["--testsets", "custom"]).testsets == "custom"

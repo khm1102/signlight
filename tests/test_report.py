@@ -53,3 +53,12 @@ def test_main_writes_tables_and_figures(tmp_path, monkeypatch):
     figs = {p.name for p in C.FIGURES_DIR.glob("*.png")}
     assert {"acc_by_condition_synth.png", "drop_by_condition_synth.png",
             "confusion_rf_geom_synth.png", "confusion_cnn_plain_synth.png"} <= figs
+
+
+def test_grouped_bars_shows_negative_values(tmp_path):
+    from signlight.report import _grouped_bars
+
+    df = pd.DataFrame({"model": ["rf_geom"] * 2, "condition": ["dark", "position"], "drop_pp": [-6.0, 4.0]})
+    ax = _grouped_bars(df, "drop_pp", "custom", ["rf_geom"], "t", "y", tmp_path / "f.png")
+    lo, hi = ax.get_ylim()
+    assert lo < -6.0 and hi > 4.0

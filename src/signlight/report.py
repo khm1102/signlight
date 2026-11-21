@@ -81,7 +81,12 @@ def _grouped_bars(df: pd.DataFrame, value: str, testset: str, models: list[str],
         ax.bar(xs, sub[value], width=width - 0.02, color=color, label=label, edgecolor=SURFACE, linewidth=1,
                yerr=yerr, error_kw={"ecolor": INK2, "elinewidth": 0.8, "capsize": 2})
     ax.set_xticks(range(len(conds)), [COND_LABEL.get(c, c) for c in conds])
-    ax.set_ylim(0, ax.get_ylim()[1] * 1.15)  # 범례가 막대와 겹치지 않게 위쪽 여백
+    vals = df[df["model"].isin(models) & df["condition"].isin(conds)][value].dropna()
+    lo = min(0.0, float(vals.min()) * 1.15) if len(vals) else 0.0
+    hi = max(0.0, float(vals.max())) * 1.15 if len(vals) else 1.0
+    ax.set_ylim(lo, hi if hi > lo else lo + 1.0)  # 위쪽은 범례 여백, 음수(개선)도 보이게
+    if lo < 0:
+        ax.axhline(0, color=INK2, linewidth=0.8)
     ax.set_ylabel(ylabel)
     ax.yaxis.grid(True, color=GRID, linewidth=0.8)
     ax.set_axisbelow(True)
@@ -90,6 +95,7 @@ def _grouped_bars(df: pd.DataFrame, value: str, testset: str, models: list[str],
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
+    return ax
 
 
 def _confusion_plot(model: str, testset: str, condition: str, path):

@@ -40,13 +40,29 @@ def select_params(cls, grid, Xtr, ytr, Xva, yva, **fixed):
     return grid[int(np.argmax(scores))], scores
 
 
+def _fingerprint(subset, preprocess: str | None) -> str:
+    """캐시가 유효한 조건: 같은 행·파일, 같은 변형 코드, 같은 검출 설정."""
+    import hashlib
+    import inspect
+
+    from . import perturb
+
+    h = hashlib.md5()
+    h.update(inspect.getsource(perturb).encode())
+    h.update("|".join(subset["relpath"]).encode())
+    h.update(f"{C.DET_CONF}|{C.DET_PAD}|{preprocess}|{C.SEED}".encode())
+    return h.hexdigest()
+
+
 def synth_landmarks(conditions: list[str], subset, cache=SYNTH_LM_PATH, preprocess: str | None = None) -> dict[str, dict[str, np.ndarray]]:
-    """synth_subset 행마다 변형(key = index 행 번호) 후 관절 추출. 캐시는 행 번호가 같을 때만 재사용."""
+    """synth_subset 행마다 변형(key = index 행 번호) 후 관절 추출.
+    캐시는 행 번호와 지문(변형 코드, 파일, 검출 설정, 전처리)이 모두 같을 때만 재사용한다."""
     keys = subset.index.to_numpy()
+    fp = _fingerprint(subset, preprocess)
     cached = {}
     if cache.exists():
         with np.load(cache) as z:
-            if np.array_equal(z["keys"], keys):
+            if "fingerprint" in z.files and str(z["fingerprint"]) == fp and np.array_equal(z["keys"], keys):
                 cached = {k: z[k] for k in z.files}
     out, changed = {}, False
     for cond in conditions:
@@ -60,7 +76,7 @@ def synth_landmarks(conditions: list[str], subset, cache=SYNTH_LM_PATH, preproce
         print(f"synth {cond}: det={out[cond]['det'].mean():.3f} ({time.time() - t:.0f}s)", flush=True)
     if changed:
         flat = {f"{c}__{k}": v for c, d in out.items() for k, v in d.items()}
-        np.savez_compressed(cache, keys=keys, **flat)
+        np.savez_compressed(cache, keys=keys, fingerprint=np.array(fp), **flat)
     return out
 
 
@@ -150,12 +166,17 @@ def eval_clahe(per_class: int = 100) -> None:
         print("rf_geom_clahe", cond, f"det={synth[cond]['det'].mean():.3f}", f"acc={e2e_accuracy(y_sub, pred):.4f}", flush=True)
 
 
-if __name__ == "__main__":
+def parse_args(argv=None) -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-class", type=int, default=100)
     ap.add_argument("--clahe", action="store_true", help="EXP-005: CLAHE 전처리 평가만 실행")
-    ap.add_argument("--testsets", default=None, help="custom: 저장된 모델로 직접 촬영셋만 평가")
-    a = ap.parse_args()
+    ap.add_argument("--testsets", choices=["custom"], default=None,
+                    help="custom: 저장된 모델로 직접 촬영셋만 평가(없으면 전체 학습·평가)")
+    return ap.parse_args(argv)
+
+
+if __name__ == "__main__":
+    a = parse_args()
     if a.clahe:
         eval_clahe(a.per_class)
     elif a.testsets == "custom":
