@@ -4,7 +4,7 @@
 - 코드: `src/signlight/cnn.py`, `scripts/colab_cnn.sh`(이 문서와 같은 커밋)
 - 환경: Colab T4(15GB), Python 3.13, TensorFlow 2.21. 로컬 패키지를 wheel로 설치(`--no-deps`)
 - 데이터: Colab VM이 `kagglehub`로 받은 Kaggle 원본(Colab 캐시, 인증 불필요)을 로컬 디스크로 복사(72,000장, 33초). 분할은 로컬과 같은 `index.csv`(EXP-001)
-- 모델: 합성곱 블록 4개(32-64-128-256, BN, ReLU, MaxPool) → GAP → Dropout 0.3 → Dense 24. 입력 128×128, 파라미터 약 39만 개
+- 모델: 합성곱 블록 4개(32-64-128-256, BN, ReLU, MaxPool) → GAP → Dropout 0.3 → Dense 24. 입력 128×128, 파라미터 396,024개
   - plain: 증강 없음
   - aug: 좌우 반전, 회전 ±5%, 이동 ±15%, 확대·축소 ±20%, 밝기 ±40%, 대비 ±30%
 - 학습: Adam 1e-3, 배치 64, 최대 15 epoch, `EarlyStopping(val_accuracy, patience 3, restore_best_weights)`, 시드 42/43/44
