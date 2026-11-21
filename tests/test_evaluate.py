@@ -3,7 +3,13 @@ import pandas as pd
 import pytest
 
 from signlight import evaluate as E
-from signlight.evaluate import FAIL, accuracy_drop, bootstrap_ci, confusion, e2e_accuracy
+from signlight.evaluate import (
+    FAIL,
+    accuracy_drop,
+    bootstrap_ci,
+    confusion,
+    e2e_accuracy,
+)
 
 
 def test_e2e_accuracy_counts_failures_as_wrong():

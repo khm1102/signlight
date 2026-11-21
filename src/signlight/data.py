@@ -93,13 +93,13 @@ def split_stats(idx: pd.DataFrame) -> dict:
     for label, g in idx.groupby("label"):
         sizes = g["group"].value_counts()
         per_class[label] = {
-            "n": int(len(g)),
-            "n_clusters": int(len(sizes)),
+            "n": len(g),
+            "n_clusters": len(sizes),
             "max_cluster": int(sizes.max()),
             "split": {k: int(v) for k, v in g["split"].value_counts().items()},
         }
     return {
-        "n": int(len(idx)),
+        "n": len(idx),
         "split": {k: int(v) for k, v in idx["split"].value_counts().items()},
         "n_clusters": int(idx["group"].nunique()),
         "per_class": per_class,

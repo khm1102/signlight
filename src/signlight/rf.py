@@ -40,7 +40,7 @@ def select_params(cls, grid, Xtr, ytr, Xva, yva, **fixed):
     return grid[int(np.argmax(scores))], scores
 
 
-def synth_landmarks(conditions: list[str], subset, cache=SYNTH_LM_PATH) -> dict[str, dict[str, np.ndarray]]:
+def synth_landmarks(conditions: list[str], subset, cache=SYNTH_LM_PATH, preprocess: str | None = None) -> dict[str, dict[str, np.ndarray]]:
     """synth_subset 행마다 변형(key = index 행 번호) 후 관절 추출. 캐시는 행 번호가 같을 때만 재사용."""
     keys = subset.index.to_numpy()
     cached = {}
@@ -55,7 +55,7 @@ def synth_landmarks(conditions: list[str], subset, cache=SYNTH_LM_PATH) -> dict[
             continue
         t = time.time()
         images = (apply(cond, load_rgb(C.ASL_ROOT / p), key) for key, p in zip(keys, subset["relpath"]))
-        out[cond] = extract(images, len(keys))
+        out[cond] = extract(images, len(keys), preprocess=preprocess)
         changed = True
         print(f"synth {cond}: det={out[cond]['det'].mean():.3f} ({time.time() - t:.0f}s)", flush=True)
     if changed:
@@ -111,7 +111,22 @@ def main(per_class: int = 100) -> None:
     (C.RESULTS_DIR / "rf_train_log.json").write_text(json.dumps(log, indent=1, default=str))
 
 
+def eval_clahe(per_class: int = 100) -> None:
+    """EXP-005: 학습된 rf_geom에 CLAHE 전처리 후 추출한 합성셋 관절을 넣어 평가(rf_geom_clahe)."""
+    idx = load_index()
+    sub = synth_subset(idx, per_class=per_class)
+    synth = synth_landmarks(C.SYNTH_CONDITIONS, sub, cache=C.PROCESSED_DIR / "synth_landmarks_clahe.npz", preprocess="clahe")
+    model = joblib.load(C.MODELS_DIR / "rf_geom.joblib")
+    y_sub = sub["y"].to_numpy()
+    for cond in C.SYNTH_CONDITIONS:
+        pred = predict_e2e(model, _feats(synth[cond], "geom"))
+        save_preds("rf_geom_clahe", "synth", cond, y_sub, pred)
+        print("rf_geom_clahe", cond, f"det={synth[cond]['det'].mean():.3f}", f"acc={e2e_accuracy(y_sub, pred):.4f}", flush=True)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-class", type=int, default=100)
-    main(ap.parse_args().per_class)
+    ap.add_argument("--clahe", action="store_true", help="EXP-005: CLAHE 전처리 평가만 실행")
+    a = ap.parse_args()
+    eval_clahe(a.per_class) if a.clahe else main(a.per_class)

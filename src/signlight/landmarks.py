@@ -18,9 +18,22 @@ from .images import edge_mean
 LANDMARKS_PATH = C.PROCESSED_DIR / "landmarks.npz"
 
 
+PREPROCESS = (None, "clahe")
+
+
+def clahe(img: np.ndarray) -> np.ndarray:
+    """LAB 색공간의 밝기(L) 채널에 CLAHE를 적용한다. 역광·어두운 사진의 손 윤곽을 살리려는 용도."""
+    lab = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
+    lab[..., 0] = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(lab[..., 0])
+    return cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+
+
 class HandDetector:
-    def __init__(self, conf: float = C.DET_CONF, pad: float = C.DET_PAD):
+    def __init__(self, conf: float = C.DET_CONF, pad: float = C.DET_PAD, preprocess: str | None = None):
+        if preprocess not in PREPROCESS:
+            raise ValueError(f"unknown preprocess: {preprocess}")
         self.pad = pad
+        self.preprocess = preprocess
         opts = vision.HandLandmarkerOptions(
             base_options=BaseOptions(model_asset_path=str(C.HAND_MODEL)),
             running_mode=vision.RunningMode.IMAGE,
@@ -40,10 +53,12 @@ class HandDetector:
         self._lm.close()
 
     def _prepare(self, img: np.ndarray) -> np.ndarray:
+        if self.preprocess == "clahe":
+            img = clahe(img)
         if self.pad <= 0:
             return np.ascontiguousarray(img)
         h, w = img.shape[:2]
-        py, px = int(round(self.pad * h)), int(round(self.pad * w))
+        py, px = round(self.pad * h), round(self.pad * w)
         return cv2.copyMakeBorder(img, py, py, px, px, cv2.BORDER_CONSTANT, value=edge_mean(img))
 
     def detect(self, img: np.ndarray) -> tuple[np.ndarray | None, bool | None]:
@@ -62,12 +77,13 @@ def extract(
     conf: float = C.DET_CONF,
     pad: float = C.DET_PAD,
     progress: int = 0,
+    preprocess: str | None = None,
 ) -> dict[str, np.ndarray]:
     lm = np.full((n, C.NUM_LANDMARKS, 3), np.nan, np.float32)
     det = np.zeros(n, bool)
     right = np.zeros(n, bool)
     t = time.time()
-    with HandDetector(conf, pad) as d:
+    with HandDetector(conf, pad, preprocess) as d:
         for i, img in enumerate(images):
             pts, is_right = d.detect(img)
             if pts is not None:

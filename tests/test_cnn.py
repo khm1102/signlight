@@ -4,7 +4,7 @@ import pytest
 from PIL import Image
 
 tf = pytest.importorskip("tensorflow")
-from signlight.cnn import build_model, make_dataset, predict_images  # noqa: E402
+from signlight.cnn import build_model, make_dataset, predict_images
 
 
 def test_build_model_output_shape():

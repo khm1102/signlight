@@ -53,3 +53,30 @@ def test_detection_rate_table():
     assert t.loc[("A", "train"), "det_rate"] == 1.0
     assert t.loc[("A", "test"), "det_rate"] == 0.0
     assert t.loc[("B", "train"), "n"] == 2
+
+
+def test_clahe_preserves_shape_and_brightens_dark():
+    from signlight.landmarks import clahe
+
+    rng = np.random.default_rng(0)
+    dark = (rng.random((200, 200, 3)) * 40).astype(np.uint8)
+    out = clahe(dark)
+    assert out.shape == dark.shape and out.dtype == np.uint8
+    assert out.mean() > dark.mean() * 1.5
+
+
+def test_detector_preprocess_option(hand_image):
+    from signlight.landmarks import HandDetector
+
+    with HandDetector(preprocess="clahe") as d:
+        lm, _ = d.detect(hand_image)
+    assert lm is not None
+
+
+def test_detector_rejects_unknown_preprocess(need_model):
+    import pytest
+
+    from signlight.landmarks import HandDetector
+
+    with pytest.raises(ValueError):
+        HandDetector(preprocess="gamma")
