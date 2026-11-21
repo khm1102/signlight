@@ -1,0 +1,88 @@
+{
+ "rf_geom": {
+  "best": {
+   "max_depth": null,
+   "min_samples_leaf": 1
+  },
+  "val_scores_detected": [
+   0.9517058446903869,
+   0.9495106558126772,
+   0.9512485136741974,
+   0.9495106558126772
+  ],
+  "kaggle_val": 0.7272155437517472,
+  "kaggle_test": 0.754054623323738,
+  "synth_clean": 0.7166666666666667,
+  "synth_dark_0.5": 0.19333333333333333,
+  "synth_dark_0.25": 0.04708333333333333,
+  "synth_clutter": 0.42083333333333334,
+  "synth_shift": 0.5175,
+  "synth_scale_small": 0.7029166666666666,
+  "synth_scale_large": 0.44958333333333333,
+  "sec": 51
+ },
+ "dt_geom": {
+  "best": {
+   "max_depth": 20
+  },
+  "val_scores_detected": [
+   0.9065215402908625,
+   0.8920698801792738,
+   0.9091740601847618
+  ],
+  "kaggle_val": 0.6947162426614482,
+  "kaggle_test": 0.7161412623744997,
+  "synth_clean": 0.6804166666666667,
+  "synth_dark_0.5": 0.17166666666666666,
+  "synth_dark_0.25": 0.0325,
+  "synth_clutter": 0.38,
+  "synth_shift": 0.47625,
+  "synth_scale_small": 0.6633333333333333,
+  "synth_scale_large": 0.415,
+  "sec": 25
+ },
+ "rf_norm": {
+  "best": {
+   "max_depth": null,
+   "min_samples_leaf": 1
+  },
+  "val_scores_detected": [
+   0.9106375194365682,
+   0.9035946217872496,
+   0.9086252629653343,
+   0.9027714259581084
+  ],
+  "kaggle_val": 0.6958344981828348,
+  "kaggle_test": 0.7228112055044583,
+  "synth_clean": 0.6916666666666667,
+  "synth_dark_0.5": 0.18541666666666667,
+  "synth_dark_0.25": 0.04875,
+  "synth_clutter": 0.40541666666666665,
+  "synth_shift": 0.49,
+  "synth_scale_small": 0.6820833333333334,
+  "synth_scale_large": 0.43625,
+  "sec": 25
+ },
+ "rf_geom_nocanon": {
+  "best": {
+   "max_depth": 20,
+   "min_samples_leaf": 1
+  },
+  "val_scores_detected": [
+   0.9572852830878991,
+   0.9540839659745723,
+   0.9574682154943748,
+   0.9546327631939998
+  ],
+  "kaggle_val": 0.7316186748672071,
+  "kaggle_test": 0.7514568559994383,
+  "synth_clean": 0.7179166666666666,
+  "synth_dark_0.5": 0.19583333333333333,
+  "synth_dark_0.25": 0.04791666666666667,
+  "synth_clutter": 0.42333333333333334,
+  "synth_shift": 0.52125,
+  "synth_scale_small": 0.7016666666666667,
+  "synth_scale_large": 0.4479166666666667,
+  "sec": 52
+ }
+}

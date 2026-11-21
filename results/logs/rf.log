@@ -1,0 +1,11 @@
+synth clean: det=0.767 (19s)
+synth dark_0.5: det=0.252 (18s)
+synth dark_0.25: det=0.072 (15s)
+synth clutter: det=0.511 (19s)
+synth shift: det=0.610 (18s)
+synth scale_small: det=0.756 (18s)
+synth scale_large: det=0.563 (18s)
+rf_geom {"best": {"max_depth": null, "min_samples_leaf": 1}, "val_scores_detected": [0.9517058446903869, 0.9495106558126772, 0.9512485136741974, 0.9495106558126772], "kaggle_val": 0.7272, "kaggle_test": 0.7541, "synth_clean": 0.7167, "synth_dark_0.5": 0.1933, "synth_dark_0.25": 0.0471, "synth_clutter": 0.4208, "synth_shift": 0.5175, "synth_scale_small": 0.7029, "synth_scale_large": 0.4496, "sec": 51}
+dt_geom {"best": {"max_depth": 20}, "val_scores_detected": [0.9065215402908625, 0.8920698801792738, 0.9091740601847618], "kaggle_val": 0.6947, "kaggle_test": 0.7161, "synth_clean": 0.6804, "synth_dark_0.5": 0.1717, "synth_dark_0.25": 0.0325, "synth_clutter": 0.38, "synth_shift": 0.4763, "synth_scale_small": 0.6633, "synth_scale_large": 0.415, "sec": 25}
+rf_norm {"best": {"max_depth": null, "min_samples_leaf": 1}, "val_scores_detected": [0.9106375194365682, 0.9035946217872496, 0.9086252629653343, 0.9027714259581084], "kaggle_val": 0.6958, "kaggle_test": 0.7228, "synth_clean": 0.6917, "synth_dark_0.5": 0.1854, "synth_dark_0.25": 0.0488, "synth_clutter": 0.4054, "synth_shift": 0.49, "synth_scale_small": 0.6821, "synth_scale_large": 0.4363, "sec": 25}
+rf_geom_nocanon {"best": {"max_depth": 20, "min_samples_leaf": 1}, "val_scores_detected": [0.9572852830878991, 0.9540839659745723, 0.9574682154943748, 0.9546327631939998], "kaggle_val": 0.7316, "kaggle_test": 0.7515, "synth_clean": 0.7179, "synth_dark_0.5": 0.1958, "synth_dark_0.25": 0.0479, "synth_clutter": 0.4233, "synth_shift": 0.5212, "synth_scale_small": 0.7017, "synth_scale_large": 0.4479, "sec": 52}
