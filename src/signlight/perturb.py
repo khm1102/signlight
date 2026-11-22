@@ -50,8 +50,18 @@ def clutter(img: np.ndarray, rng: np.random.Generator, n: int = 10, border: floa
     return out
 
 
+FRAME = 3  # Kaggle 사진 바깥의 파란 테두리 두께(px). 1~2px가 순수 파랑, 3px부터 사진 내용
+
+
+def unframe(img: np.ndarray, b: int = FRAME) -> np.ndarray:
+    """바깥 b px를 안쪽 픽셀로 덮어 테두리를 지운다. 이동·축소 때 테두리가 사진 안으로 들어오거나 빈 곳이 파랗게 채워지지 않게."""
+    return cv2.copyMakeBorder(img[b:-b, b:-b], b, b, b, b, cv2.BORDER_REPLICATE)
+
+
 def affine(img: np.ndarray, scale: float = 1.0, dx: float = 0.0, dy: float = 0.0) -> np.ndarray:
-    """scale < 1: 손이 작아짐. dx, dy: 이미지 크기 대비 이동 비율. 빈 곳은 가장자리 평균색(reflect는 가짜 손을 만듦)."""
+    """scale < 1: 손이 작아짐. dx, dy: 이미지 크기 대비 이동 비율. 빈 곳은 (테두리를 지운) 가장자리 평균색
+    (reflect는 손이 거울상으로 복제돼 가짜 손을 만들어서 쓰지 않음)."""
+    img = unframe(img)
     h, w = img.shape[:2]
     M = cv2.getRotationMatrix2D((w / 2, h / 2), 0, scale)
     M[0, 2] += dx * w

@@ -55,3 +55,17 @@ def test_scale_small_shrinks_hand(img):
 def test_unknown_condition_raises(img):
     with pytest.raises(KeyError):
         apply("fog", img, 0)
+
+
+def test_affine_fill_ignores_colored_frame():
+    # Kaggle 사진처럼 바깥 2px가 파란 테두리인 이미지: 빈 공간은 테두리 색이 아니라 안쪽 배경색이어야 한다
+    img = np.full((200, 200, 3), 150, np.uint8)
+    img[:2, :] = img[-2:, :] = img[:, :2] = img[:, -2:] = [0, 0, 250]
+    for name in ("shift", "scale_small"):
+        out = apply(name, img, key=0)
+        blank = out[100, 5] if name == "scale_small" else out[5, 100]
+        corner = out[3, 3]
+        for px in (blank, corner):
+            assert abs(int(px[0]) - 150) <= 2 and abs(int(px[2]) - 150) <= 2, (name, px)
+        blue = (out[..., 2].astype(int) - out[..., 0]) > 60
+        assert blue.sum() == 0, (name, int(blue.sum()))  # 테두리가 안쪽으로 옮겨져 파란 선이 생기면 안 된다
