@@ -53,6 +53,15 @@ rbash() {  # 원격 bash 실행 (출력이 없어도 끊기지 않게 timeout 0)
   rm -f "$out"
 }
 
+cdownload() {  # colab download, 일시적 오류(503 등)에 대비해 최대 3번 시도
+  local i
+  for i in 1 2 3; do
+    colab download -s "$SESSION" "$1" "$2" && return 0
+    log "다운로드 재시도 $i/3"; sleep $((i * 5))
+  done
+  return 1
+}
+
 log "wheel 빌드"
 rm -rf dist && uv build --wheel -q -o dist
 WHEEL=$(ls dist/signlight-*.whl | head -1)
@@ -104,7 +113,7 @@ PY
   fi
   rm -f "$out"
   tmp=$(mktemp -d)
-  colab download -s "$SESSION" "$R/out.tgz" "$tmp/out.tgz"
+  cdownload "$R/out.tgz" "$tmp/out.tgz"
   if [[ $DRY == 1 ]]; then tar tzf "$tmp/out.tgz"; else tar xzf "$tmp/out.tgz" -C "$ROOT"; fi
   rm -rf "$tmp"
   log "완료"
@@ -144,7 +153,7 @@ PY"
 fetch() {  # 원격 결과(results/, models/cnn_*)를 받아 와서 저장소에 푼다(dry면 목록만)
   rbash "cd $R && tar czf out.tgz results/preds results/logs \$(ls models/cnn_*.keras 2>/dev/null)"
   local tmp; tmp=$(mktemp -d)
-  colab download -s "$SESSION" "$R/out.tgz" "$tmp/out.tgz"
+  cdownload "$R/out.tgz" "$tmp/out.tgz"
   if [[ $DRY == 1 ]]; then tar tzf "$tmp/out.tgz"; else tar xzf "$tmp/out.tgz" -C "$ROOT"; fi
   rm -rf "$tmp"
 }
