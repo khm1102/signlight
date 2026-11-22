@@ -1,7 +1,7 @@
 # 진행 상황 (실행이 끊기면 여기부터 읽기)
 
 플랜: `docs/superpowers/plans/2026-11-22-signlight.md` · 기획안: `docs/proposal.md` · 보고서: `docs/REPORT.md`
-브랜치: `feat/pipeline` (master = 초기 설정 커밋). 원격 푸시는 하지 않았다.
+브랜치: `feat/pipeline` (master = 초기 설정 커밋). 원격: GitHub 비공개 저장소 `khm1102/signlight`.
 
 ## 현재 상태 (2026-11-22)
 - Task 1~14, 16, 17 완료. **Task 15(직접 촬영)와 Task 18(발표 자료)은 사람 확인이 필요해 대기 중**이다.
@@ -14,6 +14,8 @@
 - Task 7 특징 · 8 평가 · 9 합성 변형 · 10 RF/DT(EXP-003) · 11 CNN · 12 Colab 학습(EXP-004, 6회, 약 70분)
 - Task 13 오류 분석·CLAHE(EXP-005, 기각) · 14 촬영 안내·로더 · 16 표·그림 · 17 보고서
 - Task 15 코드 준비: `rf --testsets custom`, `colab_cnn.sh --predict-only --testsets custom`
+- 노트북: `notebooks/01_results.ipynb`(결과 정리, 로컬 실행), `notebooks/02_train_cnn_colab.ipynb`(Colab CNN 학습, `colab_cnn.sh --notebook`). `scripts/make_notebooks.py`로 생성
+- 재평가: Kaggle 사진의 파란 테두리 때문에 이동·축소 변형의 빈 곳이 파랗게 채워지던 문제를 고치고(`perturb.unframe`) RF·CNN을 다시 평가했다. 결과와 경위는 REPORT 한계 6번, EXP-003·004
 
 ## 다음
 1. 🙋 팀원 촬영(`docs/PHOTO_PROTOCOL.md`, 목표 768장) → Task 15 실행 명령은 `docs/REPORT.md` 6절에 있다.
