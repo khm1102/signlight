@@ -5,6 +5,7 @@
 #   scripts/colab_cnn.sh                     # plain·aug × seed 42 43 44, 15 epochs, kaggle_val·kaggle_test·synth 예측
 #   scripts/colab_cnn.sh --dry               # 업로드~다운로드 동작 확인(plain, seed 42, 1 epoch, 축소 데이터)
 #   scripts/colab_cnn.sh --predict-only --testsets custom   # 로컬 models/cnn_*.keras를 올려 예측만
+#   scripts/colab_cnn.sh --notebook          # notebooks/02_train_cnn_colab.ipynb를 Colab에서 실행(--dry면 SMOKE 모드)
 #
 # 사전 준비: colab 인증(colab sessions), data/processed/index.csv
 # 데이터는 Colab VM이 kagglehub로 직접 받는다(공개 데이터셋, 인증 불필요, Colab 캐시 사용).
@@ -15,11 +16,12 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 SESSION=cnn GPU=T4 VARIANTS="plain aug" SEEDS="42 43 44" EPOCHS=15
-TESTSETS="kaggle_val,kaggle_test,synth" DRY=0 PREDICT_ONLY=0
+TESTSETS="kaggle_val,kaggle_test,synth" DRY=0 PREDICT_ONLY=0 NOTEBOOK=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry) DRY=1 ;;
     --predict-only) PREDICT_ONLY=1 ;;
+    --notebook) NOTEBOOK=1 ;;
     --testsets) TESTSETS="$2"; shift ;;
     --variants) VARIANTS="$2"; shift ;;
     --seeds) SEEDS="$2"; shift ;;
@@ -78,6 +80,35 @@ if [[ $PREDICT_ONLY == 1 ]]; then
     colab upload -s "$SESSION" /tmp/signlight_custom.tgz "$R/custom.tgz"
     rbash "tar xzf $R/custom.tgz -C $R/data"
   fi
+fi
+
+if [[ $NOTEBOOK == 1 ]]; then
+  # 노트북이 설치·데이터 준비·학습·예측·결과 묶기(out.tgz)를 모두 한다. 마지막 셀이 "KB ->"를 출력해야 성공으로 본다.
+  NB=notebooks/02_train_cnn_colab.ipynb
+  if [[ $DRY == 1 ]]; then
+    NB_DRY=$(mktemp -d)/02_smoke.ipynb
+    uv run python - "$NB" "$NB_DRY" <<'PY'
+import sys, nbformat
+nb = nbformat.read(sys.argv[1], 4)
+cell = next(c for c in nb.cells if c.cell_type == "code" and "SMOKE = False" in c.source)
+cell.source = cell.source.replace("SMOKE = False", "SMOKE = True").replace("['plain', 'aug']", "['plain']").replace("[42, 43, 44]", "[42]")
+nbformat.write(nb, sys.argv[2])
+PY
+    NB=$NB_DRY
+  fi
+  log "노트북 실행: $NB"
+  out=$(mktemp)
+  colab exec -s "$SESSION" --timeout 0 -f "$NB" 2>&1 | tee "$out"
+  if grep -q -E "Traceback|CalledProcessError" "$out" || ! grep -q "KB ->" "$out"; then
+    rm -f "$out"; log "노트북 실행 실패 — 중단"; exit 1
+  fi
+  rm -f "$out"
+  tmp=$(mktemp -d)
+  colab download -s "$SESSION" "$R/out.tgz" "$tmp/out.tgz"
+  if [[ $DRY == 1 ]]; then tar tzf "$tmp/out.tgz"; else tar xzf "$tmp/out.tgz" -C "$ROOT"; fi
+  rm -rf "$tmp"
+  log "완료"
+  exit 0
 fi
 
 log "원격 준비: 데이터(kagglehub), 패키지 설치"

@@ -22,7 +22,7 @@ RF는 손 검출이 되면 강하지만 어두우면 검출부터 실패한다. 
 ```bash
 uv sync                 # .venv 생성 + 의존성 설치 (Python 3.12)
 uv run pytest -q        # 테스트
-uv run jupyter lab      # 노트북
+uv run jupyter lab      # 노트북: notebooks/01_results.ipynb(결과 정리), 02_train_cnn_colab.ipynb(Colab 학습)
 ```
 
 ## 데이터 받기

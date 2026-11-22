@@ -1,0 +1,73 @@
+[13:03:34] wheel 빌드
+[13:03:34] 세션 생성: nbdry (T4)
+[colab] Creating session 'nbdry'...
+[colab] Session READY.
+name, memory.total [MiB]
+Tesla T4, 15360 MiB
+Python 3.13.16
+__RBASH_OK_2145030586__
+[13:03:42] 업로드: wheel, index.csv
+[colab] Uploaded 'dist/signlight-0.1.0-py3-none-any.whl' to '/content/signlight/dist/signlight-0.1.0-py3-none-any.whl'
+[colab] Uploaded 'data/processed/index.csv' to '/content/signlight/data/processed/index.csv'
+[13:03:44] 노트북 실행: /var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.r17B5LOipP/02_smoke.ipynb
+[colab] Parsing notebook '/var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.r17B5LOipP/02_smoke.ipynb'...
+[colab] Executing cell 1/7 - 0e9e8605...
+[colab] Executing cell 2/7 - afd35599...
+installed signlight-0.1.0-py3-none-any.whl
+[colab] Executing cell 3/7 - accc74cc...
+Using Colab cache for faster access to the 'asl-alphabet' dataset.
+copied 72000 files in 31 s
+[colab] Executing cell 4/7 - e0ad3ccf...
+tf 2.21.0 [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+index 72000 missing 0
+[colab] Executing cell 5/7 - 0c0766b4...
+8/8 - 29s - 4s/step - accuracy: 0.1979 - loss: 2.8248 - val_accuracy: 0.0417 - val_loss: 3.1790
+cnn_plain 42 synth clean 0.0417
+cnn_plain 42 synth dark_0.5 0.0417
+cnn_plain 42 synth dark_0.25 0.0417
+cnn_plain 42 synth clutter 0.0583
+cnn_plain 42 synth shift 0.0583
+cnn_plain 42 synth scale_small 0.0417
+cnn_plain 42 synth scale_large 0.05
+== plain s42 done in 43s
+[colab] Executing cell 6/7 - e78bb07d...
+model                cnn_plain
+testset condition             
+synth   clean            0.042
+        clutter          0.058
+        dark_0.25        0.042
+        dark_0.5         0.042
+        scale_large      0.050
+        scale_small      0.042
+        shift            0.058
+/usr/local/lib/python3.13/dist-packages/IPython/core/pylabtools.py:151: UserWarning: Glyph 44536 (\N{HANGUL SYLLABLE GEU}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/usr/local/lib/python3.13/dist-packages/IPython/core/pylabtools.py:151: UserWarning: Glyph 47353 (\N{HANGUL SYLLABLE RUB}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/usr/local/lib/python3.13/dist-packages/IPython/core/pylabtools.py:151: UserWarning: Glyph 48516 (\N{HANGUL SYLLABLE BUN}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/usr/local/lib/python3.13/dist-packages/IPython/core/pylabtools.py:151: UserWarning: Glyph 54624 (\N{HANGUL SYLLABLE HAL}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+<Figure size 800x400 with 1 Axes>
+
+[Image saved to: /var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp8gj4layk.png]
+[colab] Executing cell 7/7 - 1a7ec0a4...
+4260 KB -> /content/signlight/out.tgz
+[colab] Saving notebook with outputs to '/var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.r17B5LOipP/02_smoke_output.ipynb'...
+[colab] Downloaded '/content/signlight/out.tgz' to '/var/folders/3x/7yd668r57q3fc4dh64z7bdv80000gn/T/tmp.HRXJ4yQXZd/out.tgz'
+results/preds/
+results/preds/cnn_plain__synth__shift__s42.npz
+results/preds/cnn_plain__synth__dark_0.5__s42.npz
+results/preds/cnn_plain__synth__clutter__s42.npz
+results/preds/cnn_plain__synth__clean__s42.npz
+results/preds/cnn_plain__synth__dark_0.25__s42.npz
+results/preds/cnn_plain__synth__scale_large__s42.npz
+results/preds/cnn_plain__synth__scale_small__s42.npz
+results/logs/
+results/logs/cnn_plain_s42_history.json
+models/cnn_plain_s42.keras
+[13:05:35] 완료
+[13:05:35] 세션 로그 저장 후 종료
+[colab] Exported history to 'results/logs/colab_20261122_130334.md'.
+[colab] Stopping session 'nbdry'...
+[colab] Session terminated.
