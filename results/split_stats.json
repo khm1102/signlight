@@ -1,0 +1,253 @@
+{
+  "n": 72000,
+  "split": {
+    "train": 43449,
+    "val": 14308,
+    "test": 14243
+  },
+  "n_clusters": 3160,
+  "per_class": {
+    "A": {
+      "n": 3000,
+      "n_clusters": 69,
+      "max_cluster": 1000,
+      "split": {
+        "train": 1652,
+        "val": 1000,
+        "test": 348
+      }
+    },
+    "B": {
+      "n": 3000,
+      "n_clusters": 65,
+      "max_cluster": 1000,
+      "split": {
+        "train": 1500,
+        "test": 1000,
+        "val": 500
+      }
+    },
+    "C": {
+      "n": 3000,
+      "n_clusters": 54,
+      "max_cluster": 997,
+      "split": {
+        "train": 1934,
+        "test": 767,
+        "val": 299
+      }
+    },
+    "D": {
+      "n": 3000,
+      "n_clusters": 32,
+      "max_cluster": 997,
+      "split": {
+        "train": 1974,
+        "val": 720,
+        "test": 306
+      }
+    },
+    "E": {
+      "n": 3000,
+      "n_clusters": 87,
+      "max_cluster": 995,
+      "split": {
+        "train": 1909,
+        "test": 633,
+        "val": 458
+      }
+    },
+    "F": {
+      "n": 3000,
+      "n_clusters": 224,
+      "max_cluster": 737,
+      "split": {
+        "train": 1869,
+        "test": 566,
+        "val": 565
+      }
+    },
+    "G": {
+      "n": 3000,
+      "n_clusters": 89,
+      "max_cluster": 962,
+      "split": {
+        "train": 1522,
+        "test": 962,
+        "val": 516
+      }
+    },
+    "H": {
+      "n": 3000,
+      "n_clusters": 59,
+      "max_cluster": 972,
+      "split": {
+        "train": 2227,
+        "test": 487,
+        "val": 286
+      }
+    },
+    "I": {
+      "n": 3000,
+      "n_clusters": 62,
+      "max_cluster": 914,
+      "split": {
+        "train": 1564,
+        "val": 914,
+        "test": 522
+      }
+    },
+    "K": {
+      "n": 3000,
+      "n_clusters": 36,
+      "max_cluster": 982,
+      "split": {
+        "train": 2317,
+        "val": 459,
+        "test": 224
+      }
+    },
+    "L": {
+      "n": 3000,
+      "n_clusters": 135,
+      "max_cluster": 907,
+      "split": {
+        "train": 1953,
+        "test": 524,
+        "val": 523
+      }
+    },
+    "M": {
+      "n": 3000,
+      "n_clusters": 124,
+      "max_cluster": 852,
+      "split": {
+        "train": 1611,
+        "test": 852,
+        "val": 537
+      }
+    },
+    "N": {
+      "n": 3000,
+      "n_clusters": 241,
+      "max_cluster": 679,
+      "split": {
+        "train": 1740,
+        "test": 679,
+        "val": 581
+      }
+    },
+    "O": {
+      "n": 3000,
+      "n_clusters": 181,
+      "max_cluster": 924,
+      "split": {
+        "train": 1557,
+        "val": 924,
+        "test": 519
+      }
+    },
+    "P": {
+      "n": 3000,
+      "n_clusters": 124,
+      "max_cluster": 970,
+      "split": {
+        "train": 1984,
+        "val": 508,
+        "test": 508
+      }
+    },
+    "Q": {
+      "n": 3000,
+      "n_clusters": 64,
+      "max_cluster": 799,
+      "split": {
+        "train": 1744,
+        "val": 756,
+        "test": 500
+      }
+    },
+    "R": {
+      "n": 3000,
+      "n_clusters": 128,
+      "max_cluster": 893,
+      "split": {
+        "train": 1580,
+        "val": 893,
+        "test": 527
+      }
+    },
+    "S": {
+      "n": 3000,
+      "n_clusters": 90,
+      "max_cluster": 914,
+      "split": {
+        "train": 1620,
+        "test": 914,
+        "val": 466
+      }
+    },
+    "T": {
+      "n": 3000,
+      "n_clusters": 130,
+      "max_cluster": 680,
+      "split": {
+        "train": 1870,
+        "test": 565,
+        "val": 565
+      }
+    },
+    "U": {
+      "n": 3000,
+      "n_clusters": 143,
+      "max_cluster": 906,
+      "split": {
+        "train": 1952,
+        "test": 524,
+        "val": 524
+      }
+    },
+    "V": {
+      "n": 3000,
+      "n_clusters": 285,
+      "max_cluster": 726,
+      "split": {
+        "train": 1863,
+        "test": 569,
+        "val": 568
+      }
+    },
+    "W": {
+      "n": 3000,
+      "n_clusters": 426,
+      "max_cluster": 691,
+      "split": {
+        "train": 1845,
+        "test": 578,
+        "val": 577
+      }
+    },
+    "X": {
+      "n": 3000,
+      "n_clusters": 113,
+      "max_cluster": 725,
+      "split": {
+        "train": 1862,
+        "val": 569,
+        "test": 569
+      }
+    },
+    "Y": {
+      "n": 3000,
+      "n_clusters": 199,
+      "max_cluster": 516,
+      "split": {
+        "train": 1800,
+        "test": 600,
+        "val": 600
+      }
+    }
+  },
+  "dhash_thr": 20,
+  "seed": 42
+}
